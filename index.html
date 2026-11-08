@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Chatti 对话实验平台" />
+    <title>Chatti</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section id="access-screen" class="access-screen" aria-labelledby="access-title">
+      <div class="access-card">
+        <span class="access-mark" aria-hidden="true">C</span>
+        <p class="access-kicker">CONVERSATION STUDY</p>
+        <h1 id="access-title">请输入问卷中生成的随机数</h1>
+        <form id="access-form" class="access-form" novalidate>
+          <label class="sr-only" for="condition-input">问卷中生成的随机数</label>
+          <input
+            id="condition-input"
+            type="password"
+            inputmode="numeric"
+            autocomplete="off"
+            maxlength="1"
+            placeholder="输入随机数"
+            required
+          />
+          <button type="submit">进入对话</button>
+        </form>
+      </div>
+    </section>
+
+    <main id="experiment-platform" class="page-shell is-hidden" aria-hidden="true">
+      <section class="chat-grid" aria-label="对话实验">
+        <article class="chat-card" data-chat>
+          <header class="chat-header">
+            <span class="avatar" aria-hidden="true">C</span>
+            <h1>Chatti</h1>
+          </header>
+          <div class="messages" aria-live="polite" aria-label="与 Chatti 的聊天记录"></div>
+          <form id="chat-form" class="composer">
+            <label class="sr-only" for="chat-input">给 Chatti 发送消息</label>
+            <textarea id="chat-input" rows="1" placeholder="简单说说你遇到的问题……" required></textarea>
+            <button type="submit" aria-label="发送给 Chatti">发送</button>
+          </form>
+        </article>
+
+        <aside class="scenario-card" aria-labelledby="scenario-title">
+          <div class="scenario-content">
+            <p class="scenario-label">CURRENT SITUATION</p>
+            <h2 id="scenario-title">场景描述</h2>
+            <p>你因为工作需要，开始学习一项自己以前从未接触过的技能。你已经花了不少时间观看教程、阅读资料，也尝试按照教学步骤完成练习，但实际操作时仍然经常遇到问题。有时候你以为自己已经理解了某个知识点，但是换一种情况就又不知道该怎么办。你尝试了不同的学习方法，却始终觉得进展缓慢。你有些沮丧，希望找到更有效的方法尽快完成这项任务。</p>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <div id="error-modal" class="modal-layer is-hidden" role="alertdialog" aria-modal="true" aria-labelledby="error-title">
+      <div class="modal-card modal-card-small">
+        <span class="modal-icon" aria-hidden="true">!</span>
+        <h2 id="error-title">输入有误</h2>
+        <p>请输入正确的随机数格式。</p>
+        <button id="error-close" type="button">重新输入</button>
+      </div>
+    </div>
+
+    <div id="completion-modal" class="modal-layer is-hidden" role="dialog" aria-modal="true" aria-labelledby="completion-title">
+      <div class="modal-card completion-card">
+        <span class="completion-check" aria-hidden="true">✓</span>
+        <h2 id="completion-title">实验结束</h2>
+        <p>请复制以下代码</p>
+        <output id="completion-code" class="completion-code" aria-label="实验代码"></output>
+        <button id="copy-code" type="button">复制代码</button>
+        <p id="copy-status" class="copy-status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <template id="message-template">
+      <div class="message-row"><div class="message-bubble"></div></div>
+    </template>
+    <script src="app.js?v=20261107e"></script>
+  </body>
+</html>
