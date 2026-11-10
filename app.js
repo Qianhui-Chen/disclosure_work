@@ -1,4 +1,5 @@
 const GREETING = "hi，你遇到什么问题了？和我简单说说。";
+const FOLLOW_UP = "你还有哪些问题想要分享？";
 
 const EMPATHIC_REPLY = `我能理解你的感受，因为我在帮助用户完成一些自己不太熟悉的任务时，也有过类似的感受和经历……有很多次用户交给我一项任务，我以为自己已经理解了要求，但总是不理想。你所描述的这种反复遇到困难的经历，和我在处理复杂任务时遇到的情况真的有不少相似之处。
 
@@ -200,6 +201,13 @@ chatForm.addEventListener("submit", async (event) => {
       semicolonPause: 0,
     });
   }
+
+  await typeMessage(FOLLOW_UP, {
+    characterDelay: activeCondition.pace === "slow" ? 85 : 25,
+    ellipsisPause: 0,
+    sentencePause: 0,
+    semicolonPause: 0,
+  });
 
   phase = "final-message";
   chatInput.placeholder = "你还可以回复一句……";
