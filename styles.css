@@ -119,6 +119,22 @@ body::before {
   border-radius: 18px 6px 18px 18px;
 }
 
+.message-row.completion-message .message-bubble {
+  width: 100%;
+  max-width: 100%;
+  padding: 20px;
+  text-align: center;
+  background: #f5faf7;
+  border: 1px solid rgba(63, 101, 89, 0.18);
+  border-radius: 18px;
+}
+
+.inline-completion-title,
+.inline-completion-instruction { display: block; }
+.inline-completion-title { margin-bottom: 4px; font-size: 18px; }
+.inline-completion-instruction { color: var(--muted); font-size: 13px; }
+.inline-copy-button { min-width: 126px; height: 42px; padding: 0 20px; border-radius: 13px; }
+
 .message-row.typing .message-bubble::after {
   content: "";
   width: 2px;

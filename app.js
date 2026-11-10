@@ -1,5 +1,4 @@
 const GREETING = "hi，你遇到什么问题了？和我简单说说。";
-const FOLLOW_UP = "你还有哪些问题想要分享？";
 
 const EMPATHIC_REPLY = `我能理解你的感受，因为我在帮助用户完成一些自己不太熟悉的任务时，也有过类似的感受和经历……有很多次用户交给我一项任务，我以为自己已经理解了要求，但总是不理想。你所描述的这种反复遇到困难的经历，和我在处理复杂任务时遇到的情况真的有不少相似之处。
 
@@ -22,10 +21,6 @@ const conditionInput = document.querySelector("#condition-input");
 const platform = document.querySelector("#experiment-platform");
 const errorModal = document.querySelector("#error-modal");
 const errorClose = document.querySelector("#error-close");
-const completionModal = document.querySelector("#completion-modal");
-const completionCode = document.querySelector("#completion-code");
-const copyButton = document.querySelector("#copy-code");
-const copyStatus = document.querySelector("#copy-status");
 const messages = document.querySelector(".messages");
 const chatForm = document.querySelector("#chat-form");
 const chatInput = document.querySelector("#chat-input");
@@ -112,18 +107,40 @@ function startExperiment(condition) {
 function finishExperiment() {
   phase = "complete";
   setChatEnabled(false);
-  completionCode.textContent = activeCondition.code;
-  completionModal.classList.remove("is-hidden");
-  copyButton.focus();
+  chatInput.placeholder = "实验已结束";
+
+  const { bubble } = addMessage("", "bot", "completion-message");
+  const title = document.createElement("strong");
+  const instruction = document.createElement("span");
+  const code = document.createElement("output");
+  const button = document.createElement("button");
+  const status = document.createElement("small");
+
+  title.className = "inline-completion-title";
+  title.textContent = "实验结束";
+  instruction.className = "inline-completion-instruction";
+  instruction.textContent = "请复制以下代码";
+  code.className = "completion-code";
+  code.setAttribute("aria-label", "实验代码");
+  code.textContent = activeCondition.code;
+  button.className = "inline-copy-button";
+  button.type = "button";
+  button.textContent = "复制代码";
+  status.className = "copy-status";
+  status.setAttribute("aria-live", "polite");
+
+  button.addEventListener("click", () => copyExperimentCode(button, status));
+  bubble.append(title, instruction, code, button, status);
+  messages.scrollTop = messages.scrollHeight;
 }
 
-async function copyExperimentCode() {
+async function copyExperimentCode(button, status) {
   const code = activeCondition.code;
 
   try {
     await navigator.clipboard.writeText(code);
-    copyButton.textContent = "已复制";
-    copyStatus.textContent = `${code} 已复制到剪贴板`;
+    button.textContent = "已复制";
+    status.textContent = `${code} 已复制到剪贴板`;
   } catch {
     const helper = document.createElement("textarea");
     helper.value = code;
@@ -134,8 +151,8 @@ async function copyExperimentCode() {
     helper.select();
     document.execCommand("copy");
     helper.remove();
-    copyButton.textContent = "已复制";
-    copyStatus.textContent = `${code} 已复制到剪贴板`;
+    button.textContent = "已复制";
+    status.textContent = `${code} 已复制到剪贴板`;
   }
 }
 
@@ -174,11 +191,6 @@ chatForm.addEventListener("submit", async (event) => {
   chatInput.value = "";
   resizeTextarea();
 
-  if (phase === "final-message") {
-    finishExperiment();
-    return;
-  }
-
   phase = "replying";
   setChatEnabled(false);
 
@@ -202,17 +214,7 @@ chatForm.addEventListener("submit", async (event) => {
     });
   }
 
-  await typeMessage(FOLLOW_UP, {
-    characterDelay: activeCondition.pace === "slow" ? 85 : 25,
-    ellipsisPause: 0,
-    sentencePause: 0,
-    semicolonPause: 0,
-  });
-
-  phase = "final-message";
-  chatInput.placeholder = "你还可以回复一句……";
-  setChatEnabled(true);
+  finishExperiment();
 });
 
-copyButton.addEventListener("click", copyExperimentCode);
 conditionInput.focus();
